@@ -1,0 +1,9 @@
+---
+author: <mj>
+title: Getting Started
+date: 2024-07-09
+categories: [Machine Learning, Data Science]
+tags: [TAG]     # TAG n ames should always be lowercase
+description: This file is present the process
+math: true
+--- 
