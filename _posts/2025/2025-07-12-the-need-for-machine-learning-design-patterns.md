@@ -1,6 +1,6 @@
 ---
 author: owner
-title: "Chapter 1: The Need for Machine Learning Design Patterns"
+title: "The Need for Machine Learning Design Patterns"
 date: 2025-07-12
 categories: [Books, Machine Learning Design Patterns]
 tags: [ ]     # TAG n ames should always be lowercase
