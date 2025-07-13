@@ -70,7 +70,7 @@ Within a company, there are many different job roles related to *Data* and *Mach
 
 6. ***Developers***: they often consume the model’s predictions via APIs deployed by ML engineers. These predictions are then used and integrated into user-friendly interfaces, such as web and mobile applications.
 
-![](assets/posts/data-roles.png){: .rounded-10}
+![](assets/posts/data-roles.png)
 _Figure: Job Roles – Data_
 
 
