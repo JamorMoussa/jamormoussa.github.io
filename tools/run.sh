@@ -40,6 +40,8 @@ while (($#)); do
   esac
 done
 
+rm -rf _site .jekyll-cache
+
 command="$command -H $host"
 
 if $prod; then

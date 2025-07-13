@@ -44,7 +44,7 @@ def create(title):
 
         f.write("\n".join([
                 "---",
-                "author: <mj>",
+                "author: owner",
                 f"title: {title}",
                 f"date: {date_str}",
                 "categories: [ ]",
