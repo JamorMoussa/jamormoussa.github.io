@@ -263,7 +263,7 @@ This guide gives you hands-on SQL practice for basic data modeling, querying, an
 
 9. Delete the Band and Album you added in #8
 
-    ```Sql
+    ```sql
     DELETE FROM albums
     WHERE id = 8;
 
