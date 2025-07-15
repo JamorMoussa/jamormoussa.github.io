@@ -6,6 +6,9 @@ categories: [Programming Language, SQL]
 tags: []  # TAG names should always be lowercase
 description: # add some description here
 math: true  # optional
+
+image:
+  path: "assets/headers/learn-sql-web.png"
 ---
 
 
@@ -180,3 +183,124 @@ HAVING num_albums >= 1;
 ```
 
 This guide gives you hands-on SQL practice for basic data modeling, querying, and relational operations—perfect for learning the foundations of relational databases.
+
+
+## Exercices:
+
+
+1. Create a Songs Table 
+
+    ```sql
+    CREATE TABLE songs (
+      id INT NOT NULL AUTO_INCREMENT,
+        name VARCHAR(255) NOT NULL,
+        length INT NOT NULL,
+        album_id INT NOT NULL, 
+        PRIMARY KEY (id),
+        FOREIGN KEY (album_id) REFERENCES albums(id)
+    );
+    ```
+
+2. Select only the Names of all the Bands
+    
+    ```sql
+    SELECT name as "Band Name" FROM bands;
+    ```
+
+3. Select the Oldest Album
+
+    ```sql
+    SELECT * FROM albums
+    WHERE release_year IS NOT NULL
+    ORDER BY release_year ASC LIMIT 1;
+    ```
+
+4. Get all Bands that have Albums
+
+    ```sql
+    SELECT DISTINCT b.name as 'Band Name' FROM bands as b 
+    JOIN albums as a ON a.band_id = b.id;
+    ```
+
+5. Get all Bands that have No Albums
+
+    ```sql
+    SELECT DISTINCT b.name as 'Band Name' FROM bands as b 
+    LEFT OUTER JOIN albums as a ON a.band_id = b.id
+    WHERE a.id IS NULL;
+    ```
+
+6. Get the Longest Album
+
+    ```sql
+    SELECT 
+      a.name, 
+      a.release_year, 	
+      SUM(s.length) AS length 
+    FROM albums AS a 
+    JOIN songs AS s ON a.id = s.album_id
+    GROUP BY a.name, a.release_year
+    ORDER BY length DESC LIMIT 1;
+    ```
+
+7. Update the Release Year of the Album with no Release Year
+
+    ```sql
+    UPDATE albums
+    SET release_year = 1986
+    WHERE release_year IS NULL;
+    ```
+
+8. Insert a record for your favorite Band and one of their Albums
+
+    ```sql
+    INSERT INTO bands (name)
+    VALUES ('Favorite Band Name');
+
+    INSERT INTO albums (name, release_year, band_id)
+    VALUES ('Favorite Album Name', 2000, 8);
+    ```
+
+9. Delete the Band and Album you added in #8
+
+    ```Sql
+    DELETE FROM albums
+    WHERE id = 8;
+
+    DELETE FROM bands
+    WHERE id = 8;
+    ```
+
+10. Get the Average Length of all Songs
+
+    ```sql
+    SELECT AVG(length) as "Average Song Duration" FROM songs; 
+    ```
+
+11. Select the longest Song off each Album
+
+    ```sql
+    SELECT 
+      a.name AS "Album",
+        a.release_year AS "Release Year",
+        MAX(s.length) AS "Duration"
+    FROM albums AS a 
+    JOIN songs AS s ON a.id = s.album_id
+    GROUP BY a.name, a.release_year;
+    ```
+
+12. Get the number of Songs for each Band
+
+    ```sql
+    SELECT
+      b.name AS "Band",
+      COUNT(s.name) AS "Number of Songs"
+    FROM bands as b
+    JOIN albums as a ON b.id = a.band_id
+    JOIN songs as s ON a.id = s.album_id
+    GROUP BY b.name;
+    ```
+
+## Todo:
+
+- Add section about joins type: [https://medium.com/@authfy/seven-join-techniques-in-sql-a65786a40ed3](https://medium.com/@authfy/seven-join-techniques-in-sql-a65786a40ed3)
