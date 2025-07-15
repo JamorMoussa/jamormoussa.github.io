@@ -207,6 +207,16 @@ This guide gives you hands-on SQL practice for basic data modeling, querying, an
     SELECT name as "Band Name" FROM bands;
     ```
 
+    | Band Name         | 
+    |-------------------| 
+    | Seventh Wonder    | 
+    | Metallica         | 
+    | The Ocean         | 
+    | Within Temptation | 
+    | Death             | 
+    | Van Canto         | 
+    | Dream Theater     | 
+
 3. Select the Oldest Album
 
     ```sql
@@ -215,12 +225,25 @@ This guide gives you hands-on SQL practice for basic data modeling, querying, an
     ORDER BY release_year ASC LIMIT 1;
     ```
 
+    | id | name                   | release_year | band_id | 
+    |----|------------------------|--------------|---------| 
+    | 5  | ...And Justice for All | 1988         | 2       | 
+
 4. Get all Bands that have Albums
 
     ```sql
     SELECT DISTINCT b.name as 'Band Name' FROM bands as b 
     JOIN albums as a ON a.band_id = b.id;
     ```
+
+    | Band Name         | 
+    |-------------------| 
+    | Seventh Wonder    | 
+    | Metallica         | 
+    | The Ocean         | 
+    | Within Temptation | 
+    | Death             | 
+    | Van Canto         | 
 
 5. Get all Bands that have No Albums
 
@@ -229,6 +252,10 @@ This guide gives you hands-on SQL practice for basic data modeling, querying, an
     LEFT OUTER JOIN albums as a ON a.band_id = b.id
     WHERE a.id IS NULL;
     ```
+
+    | Band Name     | 
+    |---------------| 
+    | Dream Theater | 
 
 6. Get the Longest Album
 
@@ -242,6 +269,10 @@ This guide gives you hands-on SQL practice for basic data modeling, querying, an
     GROUP BY a.name, a.release_year
     ORDER BY length DESC LIMIT 1;
     ```
+
+    | Name           | Release Year | Duration          | 
+    |----------------|--------------|-------------------| 
+    | Death Magnetic | 2008         | 74.76666593551636 | 
 
 7. Update the Release Year of the Album with no Release Year
 
@@ -277,6 +308,10 @@ This guide gives you hands-on SQL practice for basic data modeling, querying, an
     SELECT AVG(length) as "Average Song Duration" FROM songs; 
     ```
 
+    | Average Song Duration | 
+    |-----------------------| 
+    | 5.352472513259112     | 
+
 11. Select the longest Song off each Album
 
     ```sql
@@ -288,6 +323,27 @@ This guide gives you hands-on SQL practice for basic data modeling, querying, an
     JOIN songs AS s ON a.id = s.album_id
     GROUP BY a.name, a.release_year;
     ```
+
+    | Album                       | Release Year | Duration | 
+    |-----------------------------|--------------|----------| 
+    | Tiara                       | 2018         | 9.5      | 
+    | The Great Escape            | 2010         | 30.2333  | 
+    | Mercy Falls                 | 2008         | 9.48333  | 
+    | Master of Puppets           | 1986         | 8.58333  | 
+    | ...And Justice for All      | 1988         | 9.81667  | 
+    | Death Magnetic              | 2008         | 9.96667  | 
+    | Heliocentric                | 2010         | 7.48333  | 
+    | Pelagial                    | 2013         | 9.28333  | 
+    | Anthropocentric             | 2010         | 9.4      | 
+    | Resist                      | 2018         | 5.85     | 
+    | The Unforgiving             | 2011         | 5.66667  | 
+    | Enter                       | 1997         | 7.25     | 
+    | The Sound of Perseverance   | 1998         | 8.43333  | 
+    | Individual Thought Patterns | 1993         | 4.81667  | 
+    | Human                       | 1991         | 4.65     | 
+    | A Storm to Come             | 2006         | 5.21667  | 
+    | Break the Silence           | 2011         | 6.15     | 
+    | Tribe of Force              | 2010         | 8.38333  | 
 
 12. Get the number of Songs for each Band
 
@@ -301,6 +357,16 @@ This guide gives you hands-on SQL practice for basic data modeling, querying, an
     GROUP BY b.name;
     ```
 
-## Todo:
+    | Band              | Number of Songs | 
+    |-------------------|-----------------| 
+    | Seventh Wonder    | 35              | 
+    | Metallica         | 27              | 
+    | The Ocean         | 31              | 
+    | Within Temptation | 30              | 
+    | Death             | 27              | 
+    | Van Canto         | 32              | 
 
+## Todo: 
+
+- Add shema of database
 - Add section about joins type: [https://medium.com/@authfy/seven-join-techniques-in-sql-a65786a40ed3](https://medium.com/@authfy/seven-join-techniques-in-sql-a65786a40ed3)
