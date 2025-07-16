@@ -14,45 +14,56 @@ image:
 
 # Learn SQL - Web Dev Simplified
 
-**SQL** (*Structured Query Language*) is a standard language for interacting with relational databases. Below is a quick summary based on the [Web Dev Simplified SQL tutorial](https://www.youtube.com/watch?v=p3qvj9hO_Bo), with short explanations before each code section.
+**SQL** (*Structured Query Language*) is the standard language for interacting with relational databases. Below is a quick summary based on the [Web Dev Simplified SQL tutorial](https://www.youtube.com/watch?v=p3qvj9hO_Bo), with short explanations before each code section.
 
-## 📘 Create & Select a Database
+Before diving into the world of **SQL**, you’ll need a **SQL environment**. There are many tools available for this. If you prefer a graphical user interface, you might want to try [**MySQL Workbench**](https://www.mysql.com/products/workbench/).  
 
-Basic commands to create a database, delete it, and switch context to it.
+In my case, I used **MySQL** and **phpMyAdmin** installed via `docker`. I’ve written a post explaining how to set it up, check it out here: [Install MySQL and phpMyAdmin using Docker in Ubuntu](/posts/install-mysql-and-phpmyadmin-using-docker-in-ubuntu/).
+
+
+## SQL Basics
+
+This section introduces foundational **SQL** operations to help you create and interact with relational databases. You’ll learn how to create databases and tables, insert and query data, apply filters, join tables, and perform aggregations.
+
+
+### 📘 Create & Select a Database
+
+These commands are essential for setting up and switching between databases.
 
 ```sql
 -- Create a new database
 CREATE DATABASE testdb;
 
--- Delete a database (⚠️ irreversible)
+-- Delete a database (⚠️ This operation is irreversible)
 DROP DATABASE testdb;
 
--- Set the active database
+-- Select the active database to use
 USE testdb;
 ```
 
-## 🧱 Creating Tables
 
-Define tables for storing band and album information, including data types and relationships.
+### 🧱 Creating Tables
+
+Once your database is created, you can define tables to store structured data. Below is an example for a music catalog containing bands and their albums.
 
 ```sql
--- Create a new database for records
+-- Create a new database for storing record data
 CREATE DATABASE record_company;
 
--- Create a table for bands
+-- Create a table to store band information
 CREATE TABLE bands (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
--- Add a new column to the bands table
+-- Add a new column to the bands table (e.g., for country or genre)
 ALTER TABLE bands 
-ADD added_col VARCHAR(255);  -- Adds an extra column to the table
+ADD added_col VARCHAR(255);
 ```
 
 ```sql
--- Create albums table with a foreign key to bands
+-- Create an albums table with a foreign key linking to bands
 CREATE TABLE albums (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
@@ -63,37 +74,38 @@ CREATE TABLE albums (
 );
 ```
 
-## ✍️ Insert & Query Data
 
-Insert data into tables and retrieve it using basic `SELECT` queries.
+### ✍️ Insert & Query Data
+
+Once tables are defined, use `INSERT` to add data and `SELECT` to retrieve it.
 
 ```sql
--- Insert one band into the bands table
+-- Insert a single band into the bands table
 INSERT INTO bands (name)
 VALUES ('Iron Maiden');
 
--- Insert multiple bands at once
+-- Insert multiple bands in a single command
 INSERT INTO bands (name)
 VALUES ('Deuce'), ('Avenged Sevenfold'), ('Ankor');
 ```
 
 ```sql
--- Show all rows in bands
+-- View all records from the bands table
 SELECT * FROM bands;
 
--- Show only the first two records
+-- Retrieve only the first two bands
 SELECT * FROM bands LIMIT 2;
 
--- Select with aliasing for better output
+-- Use aliasing for clearer column names in results
 SELECT id AS 'ID', name AS 'Band Name'
 FROM bands;
 
--- Sort results alphabetically in descending order
+-- Sort bands in descending alphabetical order
 SELECT * FROM bands ORDER BY name DESC;
 ```
 
 ```sql
--- Insert multiple albums linked to bands by band_id
+-- Insert multiple albums referencing band IDs
 INSERT INTO albums (name, release_year, band_id)
 VALUES 
   ('The Number of the Beasts', 1985, 1),
@@ -103,103 +115,126 @@ VALUES
   ('Test Album', NULL, 3);
 ```
 
-## 🔎 Filtering Data
 
-Use various `WHERE` filters to narrow down query results.
+### 🔎 Filtering Data
+
+Use the `WHERE` clause to filter results based on conditions.
 
 ```sql
--- Show unique album names only
+-- Retrieve unique album names (no duplicates)
 SELECT DISTINCT name FROM albums;
 
--- Update the release year of an album
+-- Update a specific album's release year
 UPDATE albums
 SET release_year = 1982
 WHERE id = 1;
 ```
 
 ```sql
--- Get albums released before 2000
+-- Find albums released before the year 2000
 SELECT * FROM albums
 WHERE release_year < 2000;
 
--- Filter by string pattern or band ID
+-- Filter by partial name or specific band ID
 SELECT * FROM albums
 WHERE name LIKE '%er%' OR band_id = 2;
 ```
 
 ```sql
--- Filter albums released between two years
+-- Find albums released between two years
 SELECT * FROM albums
 WHERE release_year BETWEEN 2000 AND 2019;
 
--- Select albums with unknown (NULL) release years
+-- Show albums with unknown release years
 SELECT * FROM albums
 WHERE release_year IS NULL;
 
--- Delete albums where the release year is NULL
+-- Remove entries with missing release years
 DELETE FROM albums
 WHERE release_year IS NULL;
 ```
 
-## 🔗 Joining Tables
 
-Combine data from `bands` and `albums` using JOIN operations.
+### 🔗 Joining Tables
+
+`JOIN` operations allow you to query related data across multiple tables.
 
 ```sql
--- Inner join to match albums with their bands
+-- Match albums with their corresponding bands
 SELECT * FROM bands
 JOIN albums ON bands.id = albums.band_id;
-
--- Note:
--- INNER JOIN = only matching records
--- LEFT JOIN = all bands even if they have no albums
--- RIGHT JOIN = all albums even if the band is missing
 ```
 
-## 📊 Aggregation & Grouping
+**Join Types Overview:**
 
-Use aggregation functions like `AVG`, `COUNT`, and `GROUP BY` to summarize data.
+* `INNER JOIN`: Returns only rows with matching values in both tables.
+* `LEFT JOIN`: Returns all rows from the left table, with matching rows from the right (if any).
+* `RIGHT JOIN`: Returns all rows from the right table, with matching rows from the left (if any).
+
+
+### 📊 Aggregation & Grouping
+
+Aggregate functions let you summarize and group your data.
 
 ```sql
--- Calculate average release year of all albums
+-- Average release year of all albums
 SELECT AVG(release_year) FROM albums;
 
--- Count how many albums each band has
-SELECT band_id, COUNT(band_id) FROM albums
+-- Count how many albums each band has (by band ID)
+SELECT band_id, COUNT(*) AS album_count
+FROM albums
 GROUP BY band_id;
 ```
 
 ```sql
--- Count albums per band and show the band name
+-- Count albums per band, showing band names instead of IDs
 SELECT 
   b.name AS band_name, 
   COUNT(a.id) AS num_albums
 FROM bands AS b
 LEFT JOIN albums AS a ON a.band_id = b.id
-GROUP BY a.band_id
+GROUP BY b.id
 HAVING num_albums >= 1;
-
--- Use HAVING (not WHERE) after GROUP BY to filter results
 ```
 
-This guide gives you hands-on SQL practice for basic data modeling, querying, and relational operations—perfect for learning the foundations of relational databases.
+> ✅ **Tip:** Use `HAVING` instead of `WHERE` when filtering grouped data.
 
 
-## Exercices:
+This guide gives you a solid foundation for working with relational databases. As you get comfortable with these commands, you'll be ready to build more complex queries and applications using SQL.
 
 
-1. Create a Songs Table 
+## Exercises
+
+After exploring some basic **SQL** concepts, this section focuses on a series of exercises primarily proposed by **WebDevSimplified**. These exercises are designed to be solved after watching the related video or by following along with the previous steps. They are available in his GitHub repository [**Learn-SQL**](https://github.com/WebDevSimplified/Learn-SQL/tree/master). In the `README.md` file, each question is followed by the expected output, you'll need to figure out the appropriate SQL query to produce that output.
+
+In this post, we share our proposed solutions. First, let's explore the database schema and set up the environment.
+
+The database contains three tables: <kbd>bands</kbd>, <kbd>albums</kbd>, and <kbd>songs</kbd>. The schema is illustrated in the figure below:
+
+![Database Schema](assets/posts/sql-db-schema.png)
+
+### Environment Setup
+
+Make sure you have an environment where you can run **SQL queries**. As explained earlier, start by creating a database named `record_company`, then create the schema shown in the figure above.
+
+Once the database is created, insert the required data by running the SQL script provided [here](https://github.com/WebDevSimplified/Learn-SQL/blob/master/data.sql).
+
+After completing the setup, you can begin solving the exercises.
+
+
+1. Create a `songs` Table
 
     ```sql
     CREATE TABLE songs (
-      id INT NOT NULL AUTO_INCREMENT,
-        name VARCHAR(255) NOT NULL,
-        length INT NOT NULL,
-        album_id INT NOT NULL, 
-        PRIMARY KEY (id),
-        FOREIGN KEY (album_id) REFERENCES albums(id)
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    length INT NOT NULL,
+    album_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (album_id) REFERENCES albums(id)
     );
     ```
+
 
 2. Select only the Names of all the Bands
     
@@ -365,8 +400,3 @@ This guide gives you hands-on SQL practice for basic data modeling, querying, an
     | Within Temptation | 30              | 
     | Death             | 27              | 
     | Van Canto         | 32              | 
-
-## Todo: 
-
-- Add shema of database
-- Add section about joins type: [https://medium.com/@authfy/seven-join-techniques-in-sql-a65786a40ed3](https://medium.com/@authfy/seven-join-techniques-in-sql-a65786a40ed3)
