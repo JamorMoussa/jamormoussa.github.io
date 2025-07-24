@@ -45,7 +45,7 @@ def create(title):
         f.write("\n".join([
                 "---",
                 "author: owner",
-                f"title: {title}",
+                f'title: "{title}"',
                 f"date: {date_str}",
                 "categories: [ ]",
                 "tags: [ ]     # TAG n ames should always be lowercase",
